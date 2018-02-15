@@ -11,7 +11,6 @@ class MoviesController < ApplicationController
   end
 
   def index
-    debugger
     @movies = Movie.find(:all,:order => (params[:sort_by]))
     @sort = params[:sort_by]
   end
