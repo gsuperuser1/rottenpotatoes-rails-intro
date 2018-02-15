@@ -1,12 +1,10 @@
+Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
+  root 'movies#index'
 
-
-Myrottenpotatoes::Application.routes.draw do
-  resources :movies
-  root :to => redirect('/movies')
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
@@ -16,6 +14,7 @@ Myrottenpotatoes::Application.routes.draw do
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
+  resources :movies
   
   # Example resource route with options:
   #   resources :products do
@@ -57,3 +56,4 @@ Myrottenpotatoes::Application.routes.draw do
   #     resources :products
   #   end
 end
+
