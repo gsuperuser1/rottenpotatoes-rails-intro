@@ -12,20 +12,51 @@ class MoviesController < ApplicationController
 
   def index
     #@movies = Movie.all
+    @ratings = params[:ratings]
     @sort = params[:sort_by]
-    	if !(@sort.nil? || @sort == 0) then
-		@movies = Movie.order(@sort)
+    @all_ratings = Movie.full_ratings
+    @set_ratings = params[:ratings]
+    redirection = false
+	
+    if @sort then
+	session[:sort_by] = @sort
+    elsif session[:sort_by] then
+	@sort = session[:sort_by]
+	redirection = true
+   else
+	@sort = nil
+    end
+#Uncomment to show all options if null.
+    if params[:commit] == "Refresh" && @ratings.nil? then
+#	session[:ratings] =nil
+    elsif @ratings then
+	session[:ratings] = @ratings
+    elsif session[:ratings] then
+	@ratings = session[:ratings]
+	redirection = true
+    else
+        @ratings = nil
+     end
+	
+     if redirection then
+	flash.keep
+	redirect_to movies_path :sort_by=>@sort, :ratings=>@ratings
+     end
+#Check which option is chooosed. If none, then show all.
+	if @sort && @ratings then
+	  @movies = Movie.where(:rating => @ratings.keys).order(@sort)
+	elsif @sort then
+	  @movies = Movie.order(@sort)
+	elsif @ratings then
+	  @movies = Movie.where(:rating => @ratings.keys)
 	else
-		@movies = Movie.all
+	  @movies = Movie.all
 	end
-	if params[:ratings]
-	  @movies = Movie.where(:rating => params[:ratings].keys).order(@sort)
+#If rating was nil or  then seed hash
+       if @ratings.nil? then
+               @ratings =  Hash.new
 	end
-	@all_ratings = Movie.full_ratings
-	@set_ratings = params[:ratings]
-	if !@set_ratings
-		@set_ratings =  Hash.new
-	end
+
   end
 
   def new
