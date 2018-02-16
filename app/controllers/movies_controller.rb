@@ -26,6 +26,8 @@ class MoviesController < ApplicationController
    else
 	@sort = nil
     end
+#Note. If there are no cookies, or there are no options, for sorting. 
+#Then it allow empty boxes.
 #Uncomment to show all options if null.
     if params[:commit] == "Refresh" && @ratings.nil? then
 #	session[:ratings] =nil
